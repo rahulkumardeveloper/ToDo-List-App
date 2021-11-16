@@ -1,25 +1,61 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import ToDolist from "./ToDolist";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+// i am using hooks for state managment
+  const [InputList, setInputList] = useState("");
+
+  const [items, setItem] = useState([]);
+// input occure logic
+  const InputItem = (event) => {
+  let var1=event.target
+  let val=var1.value
+    setInputList(val);
+  }
+// click add list 
+  const AddListItem = () => {
+    setItem((olditem) => {
+      return [...olditem, InputList]
+    })
+    setInputList(" ");
+  }
+
+  const deleteItem=(id)=>{
+    setItem((olditem) => {
+      return olditem.filter((arrElement,index)=>{
+        return index !== id;
+      })
+     
+    })
+
 }
+  return (
+    <>
+      <div className="main_div">
+        <div className="center_div">
+          <br />
+          <h1>ToDo List </h1>
+          <br />
+          <input type="text" placeholder="Add a Item " onChange={InputItem} value={InputList} />
+          <button onClick={AddListItem}> + </button>
+          <ol >
+
+            {items.map((itemval ,index) => {
+              return <ToDolist
+               key={index} 
+               id={index} 
+               text={itemval} 
+               onSelect={deleteItem} />
+            })
+            }
+          </ol>
+        </div>
+      </div>
+
+
+    </>
+  )
+}
+
 
 export default App;
